@@ -10,17 +10,15 @@ RUN yum update -y && \
 # change directory
 RUN cd /var/www/html
 
-# download webfiles
-RUN wget 
-
-# unzip folder
-RUN unzip 
+# download webfiles from git repo
+RUN yum install -y git && \
+    git clone https://github.com/kwcloudconsulting/docker_static_test.git /var/www/html
 
 # copy files into html directory
-RUN cp -r * /var/www/html/
+RUN cp -r /var/www/html/* /var/www/html/
 
 # remove unwanted folder
-RUN rm -rf 
+RUN rm -rf /var/www/html/docker_static_test
 
 # exposes port 80 on the container
 EXPOSE 80
