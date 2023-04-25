@@ -2,26 +2,20 @@ FROM amazonlinux:latest
 
 # Install dependencies
 RUN yum update -y && \
-    yum install -y httpd && \
-    yum search wget && \
-    yum install wget -y && \
-    yum install unzip -y
+    yum install -y httpd wget unzip git && \
+    yum search wget
 
-# change directory
-RUN cd /var/www/html
+# Change directory
+WORKDIR /var/www/html
 
-# download webfiles from git repo
-RUN yum install -y git && \
-    git clone https://github.com/kwcloudconsulting/docker_static_test.git /var/www/html
+# Download webfiles from git repo
+RUN git clone https://github.com/kwcloudconsulting/docker_static_test.git .
 
-# copy files into html directory
-RUN cp -r /var/www/html/* /var/www/html/
-
-# remove unwanted folder
+# Remove unwanted folder
 RUN rm -rf /var/www/html/docker_static_test
 
-# exposes port 80 on the container
+# Expose port 80 on the container
 EXPOSE 80
 
-# set the default application that will start when the container start
+# Set the default application that will start when the container starts
 ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
